@@ -95,10 +95,22 @@ for(var key in db_key) {
     	evt.stopPropagation();
     	evt.preventDefault();
     	evt.dataTransfer.dropEffect = "copy";
-    }, false);
+	this.$textarea.parentElement.classList.add("over");
+    }.bind({"$textarea": $textarea}), false);
+
+    $textarea.addEventListener("dragleave", function(evt) {
+    	evt.stopPropagation();
+    	evt.preventDefault();
+	this.$textarea.parentElement.classList.remove("over");
+    }.bind({"$textarea": $textarea}), false);
 
     $textarea.addEventListener("drop", function(evt) {
     	evt.preventDefault();
+
+	if(this.$textarea.parentElement.className.indexOf("over") >= 0) {
+	    this.$textarea.parentElement.classList.remove("over");
+	}
+
 	var files = evt.dataTransfer.files;
 
 	// Make one Document for all uploaded attachments
@@ -110,13 +122,20 @@ for(var key in db_key) {
 	var file = files[0];
 
 	doc.save(function() {
-	    this.doc.put_file_attachment(file.name, this.file);
+	    this.doc.put_file_attachment(file.name, this.file, null, function(percent) {
+		this.$textarea.setAttribute("placeholder", "" + Math.floor(percent*100) + "%");
+		if(percent == 1) {
+		    this.$textarea.setAttribute("placeholder", "type or drag here");
+		}
+	    }.bind({"$textarea": $textarea}));
 	}.bind({
 	    doc: doc,
+	    "$textarea": $textarea,
 	    file: file}));
 
     }.bind({
-	db: dbs[key]
+	db: dbs[key],
+	"$textarea": $textarea	
     }), false);
 
 

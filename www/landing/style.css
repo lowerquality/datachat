@@ -205,6 +205,9 @@ textarea {
     box-shadow: none;
     overflow: hidden;
 }
+div.over {
+    background-color: #ccc;
+}
 
 ::-webkit-input-placeholder {
    color: #000;
