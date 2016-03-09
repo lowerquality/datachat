@@ -26,9 +26,19 @@ for(var key in db_key) {
 
     views[key] = new S.CollectionView(msgs[key], function(obj, $div) {
 	// replace newlines with breaks
-	var text = obj.text.replace("\n", "<p>");
-	text = text.replace(/(https?:\/\/[^\s$]*)[\s$]/gim, '<a class="extlink" target="_blank" href="$1">$1</a> ')
-	$div.innerHTML = text;
+	if(obj.text) {
+	    var text = obj.text.replace("\n", "<p>");
+	    text = text.replace(/(https?:\/\/[^\s$]*)[\s$]/gim, '<a class="extlink" target="_blank" href="$1">$1</a> ')
+	    $div.innerHTML = text;
+	}
+	if(obj._attachments) {
+	    for(var name in obj._attachments) {
+		var $a = document.createElement("a");
+		$a.href = obj.get_attachment_url(name);
+		$a.textContent = name;
+		$div.appendChild($a);
+	    }
+	}
     }, "li", function(x,y) { return x.time > y.time ? 1 : -1}, $list);
 
     // Hook up the input to to be a functioning element
@@ -63,5 +73,34 @@ for(var key in db_key) {
     var $arrow = $column.querySelector(".send");
     $arrow.onclick = send_message;
 
+
+    //Allow dragging files into the text area
+    $textarea.addEventListener("dragover", function(evt) {
+    	evt.stopPropagation();
+    	evt.preventDefault();
+    	evt.dataTransfer.dropEffect = "copy";
+    }, false);
+
+    $textarea.addEventListener("drop", function(evt) {
+    	evt.preventDefault();
+	var files = evt.dataTransfer.files;
+
+	// Make one Document for all uploaded attachments
+	var doc = new S.Document(this.db, {
+	    "type": "message",
+	    "time": new Date().getTime(),
+	});
+
+	var file = files[0];
+
+	doc.save(function() {
+	    this.doc.put_file_attachment(file.name, this.file);
+	}.bind({
+	    doc: doc,
+	    file: file}));
+
+    }.bind({
+	db: dbs[key]
+    }), false);;
 
 }
