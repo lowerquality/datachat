@@ -37,6 +37,14 @@ for(var key in db_key) {
 		$a.href = obj.get_attachment_url(name);
 		$a.textContent = name;
 		$div.appendChild($a);
+
+		var parts = name.split(".");
+		var ext = parts[parts.length-1].toLowerCase();
+		if(ext == "jpg" || ext == "png") {
+		    var $img = document.createElement("img");
+		    $img.src = obj.get_attachment_url(name);
+		    $div.appendChild($img);
+		}
 	    }
 	}
     }, "li", function(x,y) { return x.time > y.time ? 1 : -1}, $list);
