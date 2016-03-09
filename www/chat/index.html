@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="seatbelt.js"></script>
+  </head>
+  <body>
+    <script>
+
+var CHAT = {};
+
+var db = new S.Database();
+db.connect();
+//db.load();
+//db.onload = CHAT.main;
+
+CHAT.main = function() {
+    CHAT.$message_list = document.createElement("ol");
+    document.body.appendChild(CHAT.$message_list);
+
+    CHAT.message_collection = new S.Subcollection(db, function(x) { return x.type == "message"; });
+
+    CHAT.message_view = new S.CollectionView(CHAT.message_collection, CHAT.message_render, "li", CHAT.sort_fn, CHAT.$message_list);
+
+    CHAT.$text = document.createElement("textarea");
+    document.body.appendChild(CHAT.$text);
+
+    CHAT.$code = document.createElement("textarea");
+    document.body.appendChild(CHAT.$code);
+
+    CHAT.$button = document.createElement("button");
+    CHAT.$button.textContent = "send message";
+    CHAT.$button.onclick = function() {
+	var mess = new S.Document(db, {"type": "message",
+				       "text": CHAT.$text.value,
+				       "code": CHAT.$code.value,
+				       "time": new Date().getTime()
+				      });
+	mess.save();
+	CHAT.message_view.sort();
+
+	CHAT.$text.value = "";
+	CHAT.$code.value = "";
+    }
+    document.body.appendChild(CHAT.$button);
+};
+
+CHAT.message_render = function(obj, $div) {
+    $div.textContent = (obj.time || "") + ": " + obj.text;
+
+    if(obj.code) {
+	var $code = document.createElement("pre");
+	$code.textContent = obj.code;
+	$code.onclick = function() {
+	    eval.call(window, obj.code);
+	}
+	$div.appendChild($code);
+    }
+};
+
+CHAT.sort_fn = function(x,y) {
+    return x.time > y.time ? 1 : -1;
+};
+
+CHAT.main();
+      
+    </script>
+  </body>
+</html>
