@@ -28,7 +28,7 @@ for(var key in db_key) {
 	// replace newlines with breaks
 	if(obj.text) {
 	    var text = obj.text.replace("\n", "<p>");
-	    text = text.replace(/(https?:\/\/[^\s$]*)[\s$]/gim, '<a class="extlink" target="_blank" href="$1">$1</a> ')
+	    text = text.replace(/(https?:\/\/[^\s$]*)[\s$]?/gim, '<a class="extlink" target="_blank" href="$1">$1</a> ')
 	    $div.innerHTML = text;
 	}
 	if(obj._attachments) {
