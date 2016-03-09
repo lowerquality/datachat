@@ -33,17 +33,18 @@ for(var key in db_key) {
 	}
 	if(obj._attachments) {
 	    for(var name in obj._attachments) {
-		var $a = document.createElement("a");
-		$a.href = obj.get_attachment_url(name);
-		$a.textContent = name;
-		$div.appendChild($a);
-
 		var parts = name.split(".");
 		var ext = parts[parts.length-1].toLowerCase();
-		if(ext == "jpg" || ext == "png") {
+		if(ext == "jpg" || ext == "png" || ext == "gif") {
 		    var $img = document.createElement("img");
 		    $img.src = obj.get_attachment_url(name);
 		    $div.appendChild($img);
+		}
+		else {
+		    var $a = document.createElement("a");
+		    $a.href = obj.get_attachment_url(name);
+		    $a.textContent = name;
+		    $div.appendChild($a);
 		}
 	    }
 	}
