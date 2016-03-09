@@ -21,6 +21,10 @@ for(var key in db_key) {
     $list.innerHTML = "";
 
     views[key] = new S.CollectionView(msgs[key], function(obj, $div) {
+
+	// Are we at the bottom?
+	var at_bottom = ($div.parentElement.scrollTop + $div.parentElement.clientHeight) >= ($div.parentElement.scrollHeight - 30);
+	
 	// replace newlines with breaks
 	if(obj.text) {
 	    var text = obj.text.replace("\n", "<p>");
@@ -45,6 +49,11 @@ for(var key in db_key) {
 		}
 		$div.appendChild($a);
 	    }
+	}
+
+	if(at_bottom) {
+	    // Make sure we're still at the bottom
+	    $div.parentElement.scrollTop = $div.parentElement.scrollHeight;
 	}
     }, "li", function(x,y) { return x.time > y.time ? 1 : -1}, $list);
 
@@ -115,7 +124,7 @@ for(var key in db_key) {
 	views[this.key].sort();
 
 	// Scroll to the bottom
-	this.$list.scrollTop = this.$list.scrollHeight;
+	// this.$list.scrollTop = this.$list.scrollHeight;
 	
     }.bind({key: key, "$list": $list});
 
