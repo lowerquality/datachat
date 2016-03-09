@@ -13,21 +13,6 @@ body {
 /* big chat window */
 
 #chatOne {
-/*	display: none; */
-	position: absolute;
-	width: 90vw;
-	height: 90vh;
-	margin: auto;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	z-index: 100;
-	border: 1px dashed black;
-	background: #fff;
-}
-
-#chatTwo, #chatThre, #chatFour, #chatFive {
 	display: none;
 	position: absolute;
 	width: 90vw;
@@ -37,7 +22,7 @@ body {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	z-index: 100;
+	z-index: 10000;
 	border: 1px dashed black;
 	background: #fff;
 }
@@ -82,14 +67,13 @@ body {
 
 /* chat columns */
 
-#one, #two, #thre, #four, #five {
+#one, #two, #thre, #four {
 	position: relative;
 	display: inline-block;
 	width: 25vw;
 	height: 100vh;
 	margin: 0;
-	overflow: auto;
-	border-right: 1px dashed #000;
+	overflow: hidden;
 }
 
 ul img {
@@ -104,31 +88,31 @@ list styles
 ul { 
 	position: absolute;
 	margin: 0;
-	/*margin-left: 20px; */
-	/*padding: 10px;*/
+	padding: 10px 0 0 0;
 	list-style: none;
 	width: 100%;
-height: 100%;
-	overflow-x: hidden;
-overflow-y: auto;
+	height: calc(100% - 58px);
 }
 
 li {
-	line-height: 24px;
+    line-height: 24px;
+    margin-left: 30px;
 }
 
-#one > ul, #two > ul, #thre > ul, #four > ul, #five > ul {
-	bottom: 48px;
+#one > ul, #two > ul, #thre > ul, #four > ul {
+    width: 100%;
+    margin-bottom: 58px;
+    overflow: scroll;
 }
 
-#chatOne ul, #chatTwo ul, #chatThre ul, #chatFour ul, #chatFive ul {
-	bottom: 48px;
+#chatOne ul, #chatTwo ul, #chatThre ul, #chatFour ul {
+	bottom: 58px;
 }
 
 ul > li::before {
 	position: absolute;
 	margin-left: -20px;
-	margin-right: 10px;
+	font-family: sans-serif;
 }
 
 .first > li::before {
@@ -147,10 +131,6 @@ ul > li::before {
 	content: "4";
 }
 
-.fifth > li::before {
-	content: "5";
-}
-
 .codeT > li::before {
 	content: ">";
 }
@@ -166,7 +146,6 @@ some fixed elements:
 .open, .close, .numb, .send {
 	position: absolute;
 	top: 0;
-	color: #000;
 	font-family: sans-serif;
 }
 
@@ -182,12 +161,14 @@ some fixed elements:
 .close { -webkit-transform: rotate(-135deg); z-index: 1000; }
 
 .numb {
+        top: 10px;
 	left: 10px;
 	margin: 0;
 }
 
 .send {
-	margin: 0;
+        margin: 0;
+	top: 10px;
 	right: 10px;
 	cursor: pointer;
 	font-size: 20px;
@@ -195,18 +176,13 @@ some fixed elements:
 
 .textA {
 	position: absolute;
-	height: 48px;
+	height: 58px;
 	width: 100%;
 	bottom: 0;
 	margin: 0;
-}
-
-.textB {
-	position: absolute;
-	height: 48px;
-	width: 100%;
-	bottom: 0;
-	margin: 0;
+	padding: 10px 0 0 0;
+	background: #fff;
+	border-top: 1px dashed #000;
 }
 
 textarea { 
