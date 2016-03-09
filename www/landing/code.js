@@ -35,17 +35,19 @@ for(var key in db_key) {
 	    for(var name in obj._attachments) {
 		var parts = name.split(".");
 		var ext = parts[parts.length-1].toLowerCase();
+
+		var $a = document.createElement("a");
+		$a.href = obj.get_attachment_url(name);
+
 		if(ext == "jpg" || ext == "png" || ext == "gif") {
 		    var $img = document.createElement("img");
 		    $img.src = obj.get_attachment_url(name);
-		    $div.appendChild($img);
+		    $a.appendChild($img);
 		}
 		else {
-		    var $a = document.createElement("a");
-		    $a.href = obj.get_attachment_url(name);
 		    $a.textContent = name;
-		    $div.appendChild($a);
 		}
+		$div.appendChild($a);
 	    }
 	}
     }, "li", function(x,y) { return x.time > y.time ? 1 : -1}, $list);
