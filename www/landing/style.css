@@ -1,0 +1,230 @@
+
+* {
+	box-sizing: border-box; 
+}
+
+body { 
+	margin: 0;  
+	font-size: small;
+	height: 100vh;
+	overflow: hidden;
+}
+
+/* big chat window */
+
+#chatOne {
+/*	display: none; */
+	position: absolute;
+	width: 90vw;
+	height: 90vh;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 100;
+	border: 1px dashed black;
+	background: #fff;
+}
+
+#chatTwo, #chatThre, #chatFour, #chatFive {
+	display: none;
+	position: absolute;
+	width: 90vw;
+	height: 90vh;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 100;
+	border: 1px dashed black;
+	background: #fff;
+}
+
+.left, .right {
+	position: absolute;
+	width: 45vw;
+	top: 0;
+	bottom: 0;
+}
+
+.right {
+	right: 0;
+	font-family: monospace;
+	font-size: 14px;
+	color: #333;
+}
+
+.left {
+	left: 0;
+	border-right: 1px dashed #000;
+}
+
+.leftChat, .rightCode {
+	position: absolute;
+	width: 45vw;
+	top: 0;
+	bottom: 0;
+}
+
+.rightCode {
+	right: 0;
+	font-family: monospace;
+	font-size: 14px;
+	color: #333;
+}
+
+.leftChat {
+	left: 0;
+	border-right: 1px dashed #000;
+}
+
+/* chat columns */
+
+#one, #two, #thre, #four, #five {
+	position: relative;
+	display: inline-block;
+	width: 25vw;
+	height: 100vh;
+	margin: 0;
+	overflow: auto;
+	border-right: 1px dashed #000;
+}
+
+/* 
+
+list styles
+ 
+*/
+
+ul { 
+	position: absolute;
+	margin: 0;
+	/*margin-left: 20px; */
+	/*padding: 10px;*/
+	list-style: none;
+	width: 100%;
+height: 100%;
+	overflow-x: hidden;
+overflow-y: auto;
+}
+
+li {
+	line-height: 24px;
+}
+
+#one > ul, #two > ul, #thre > ul, #four > ul, #five > ul {
+	bottom: 48px;
+}
+
+#chatOne ul, #chatTwo ul, #chatThre ul, #chatFour ul, #chatFive ul {
+	bottom: 48px;
+}
+
+ul > li::before {
+	position: absolute;
+	margin-left: -20px;
+	margin-right: 10px;
+}
+
+.first > li::before {
+	content: "1";
+}
+
+.second > li::before {
+	content: "2";
+}
+
+.third > li::before {
+	content: "3";
+}
+
+.fourth > li::before {
+	content: "4";
+}
+
+.fifth > li::before {
+	content: "5";
+}
+
+.codeT > li::before {
+	content: ">";
+}
+
+/*
+
+some fixed elements:
+– textarea (plus its number)
+– arrows (send, maximize, minimize)
+
+*/
+
+.open, .close, .numb, .send {
+	position: absolute;
+	top: 0;
+	color: #000;
+	font-family: sans-serif;
+}
+
+.open, .close {
+	right: 0;
+	margin: 10px 15px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+.open { -webkit-transform: rotate(45deg); }
+
+.close { -webkit-transform: rotate(-135deg); z-index: 1000; }
+
+.numb {
+	left: 10px;
+	margin: 0;
+}
+
+.send {
+	margin: 0;
+	right: 10px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+.textA {
+	position: absolute;
+	height: 48px;
+	width: 100%;
+	bottom: 0;
+	margin: 0;
+}
+
+.textB {
+	position: absolute;
+	height: 48px;
+	width: 100%;
+	bottom: 0;
+	margin: 0;
+}
+
+textarea { 
+	font-size: 16px;
+	height: 100%;
+	width: 100%;
+	margin: 0; 
+	padding: 0;
+	padding-left: 30px; 
+	border: none; 
+	background: transparent;
+	resize: none;
+	outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+::-webkit-input-placeholder {
+   color: #000;
+}
+
+/* end */
