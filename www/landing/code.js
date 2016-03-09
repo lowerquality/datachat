@@ -37,6 +37,7 @@ for(var key in db_key) {
 		var ext = parts[parts.length-1].toLowerCase();
 
 		var $a = document.createElement("a");
+		$a.setAttribute("target", "_blank");
 		$a.href = obj.get_attachment_url(name);
 
 		if(ext == "jpg" || ext == "png" || ext == "gif") {
