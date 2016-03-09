@@ -123,14 +123,16 @@ for(var key in db_key) {
 
 	doc.save(function() {
 	    this.doc.put_file_attachment(file.name, this.file, null, function(percent) {
+		console.log("placeholder", "" + Math.floor(percent*100) + "%");
+
 		this.$textarea.setAttribute("placeholder", "" + Math.floor(percent*100) + "%");
 		if(percent == 1) {
 		    this.$textarea.setAttribute("placeholder", "type or drag here");
 		}
-	    }.bind({"$textarea": $textarea}));
+	    }.bind({"$textarea": this.$textarea}));
 	}.bind({
 	    doc: doc,
-	    "$textarea": $textarea,
+	    "$textarea": this.$textarea,
 	    file: file}));
 
     }.bind({
