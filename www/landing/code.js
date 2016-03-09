@@ -13,10 +13,6 @@ for(var key in db_key) {
     dbs[key] = new S.Database(db_key[key] + "/db/");
     dbs[key].connect();
 
-    dbs[key].onload = function() {
-	views[this.key].sort();
-    }.bind({key: key});
-
     msgs[key] = new S.Subcollection(dbs[key], function(x) { return x.type=="message"; });
 
     var $column = document.getElementById(key);
@@ -112,6 +108,15 @@ for(var key in db_key) {
 
     }.bind({
 	db: dbs[key]
-    }), false);;
+    }), false);
+
+
+    dbs[key].onload = function() {
+	views[this.key].sort();
+
+	// Scroll to the bottom
+	this.$list.scrollTop = this.$list.scrollHeight;
+	
+    }.bind({key: key, "$list": $list});
 
 }
