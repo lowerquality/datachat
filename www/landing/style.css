@@ -13,7 +13,7 @@ body {
 /* big chat window */
 
 #chatOne {
-	display: none; 
+/*	display: none; */
 	position: absolute;
 	width: 75vw;
 	height: 75vh;
@@ -24,18 +24,12 @@ body {
 	left: 0;
 	z-index: 10000;
 	border: 1px dashed black;
-	background: #fff;
+	background: #eee;
 }
-
-#chatOne.visible {
-    display: block; 
-}
-
 
 .left, .right {
 	position: absolute;
 	width: 37.5vw;
-	top: 0;
 	bottom: 0;
 }
 
@@ -59,7 +53,7 @@ body {
 	right: 0;
 	font-family: monospace;
 	font-size: 14px;
-	color: #333;
+	color: #00d;
 }
 
 .leftChat {
@@ -70,7 +64,7 @@ body {
 	position: absolute;
 	top: 10px;
 	margin: 0;
-	color: #f0f;
+	color: #00d;
 }
 
 .codeLine {
@@ -85,7 +79,7 @@ body {
 
 .mono::-webkit-input-placeholder, textarea.mono {
 	font-family: monospace;
-	color: #f0f;
+	color: #00d;
 }
 
 /* chat columns */
@@ -97,12 +91,6 @@ body {
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
-	transition-property: opacity;
-	transition-duration: 0.5s;
-}
-
-.zoomed {
-    opacity: 0.1;
 }
 
 #info {
@@ -114,13 +102,6 @@ body {
 	overflow: hidden;
 }
 
-ul img {
-    /*width: 66%;*/
-    height: 100px;
-    display: block;
-    margin-bottom: 10px;
-    max-width: 100%;
-}
 /* 
 
 list styles
@@ -142,6 +123,14 @@ li {
     word-wrap: break-word;
 }
 
+ul img {
+    /*width: 66%;*/
+    height: 100px;
+    display: block;
+    margin-bottom: 10px;
+    max-width: 100%;
+}
+
 #one > ul, #two > ul, #thre > ul, #four > ul {
     width: 100%;
     margin-bottom: 58px;
@@ -151,15 +140,22 @@ li {
 #info > ul {
 	border-left: 1px dashed #000;
 	height: 100%;
-	background: #ff0;
 }
 
 #info li {
-	margin: 0;
+	font-family: sans-serif;
+	font-size: 14px;
+	margin: 0 20px;
+	-webkit-transform: rotate(90deg); 
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);  
+	transform: rotate(90deg);
+	white-space: nowrap;
 }
 
-#chatOne ul, #chatTwo ul, #chatThre ul, #chatFour ul {
+#chatOne ul {
 	bottom: 58px;
+	overflow: scroll;
 }
 
 ul > li::before {
@@ -199,7 +195,6 @@ some fixed elements:
 .open, .close, .numb, .send {
 	position: absolute;
 	font-family: sans-serif;
-	z-index: 1000;
 }
 
 .open, .close {
