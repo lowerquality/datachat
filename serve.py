@@ -35,7 +35,7 @@ class ImageThumbnail(cyst.Insist):
 
         h = 100
         w = int(h * im.size[0] / float(im.size[1]))
-        im = im.resize((w, h), resample=Image.LANCZOS)
+        im = im.resize((w, h), resample=1)
         im.save(outpath, quality=75)
 
 class PreviewableDocument(seatbelt.Document):
