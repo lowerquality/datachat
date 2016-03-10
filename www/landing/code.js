@@ -80,6 +80,7 @@ Object.keys(db_key).forEach(function(key) {
 	var $chatOne = document.getElementById("chatOne");
 	$chatOne.classList.add("visible");
 
+	// NEED TO FIX: DIFFERENTIATE BETWEEN LEFT AND RIGHT TEXTAREAS!
 	var $textA = $chatOne.querySelector("textarea");
 
 	// Add "zoomed" class to the column
@@ -90,7 +91,7 @@ Object.keys(db_key).forEach(function(key) {
 	var $fiXed = $chatOne.querySelector(".numb");
 
 	// Show messages
-	var $list = $chatOne.querySelector("ul");
+	var $list = document.getElementById("leftOne");
 	$list.innerHTML = "";
 	
 	// Add the right prefix to the <li> and <p>
@@ -101,6 +102,10 @@ Object.keys(db_key).forEach(function(key) {
 
 	// Create a log
 	codelog = new CodeLog(key, document.getElementById("codeOne"));
+	
+	// Right screen
+	/*var $renderF = $chatOne.querySelector(".renderF");
+	$renderF.innerHTML = message_render;*/
 
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
