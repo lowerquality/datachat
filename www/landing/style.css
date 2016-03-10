@@ -188,6 +188,36 @@ ul > li::before {
 	content: ">";
 }
 
+/*  */
+
+p.numb::before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	font-family: sans-serif;
+}
+
+p.numb.first::before {
+	content: "1";
+}
+
+p.numb.second::before {
+	content: "2";
+}
+
+p.numb.third::before {
+	content: "3";
+}
+
+p.numb.fourth::before {
+	content: "4";
+}
+
+p.numb.codeT::before {
+	content: ">";
+}
+
 /*
 
 some fixed elements:
@@ -239,7 +269,7 @@ some fixed elements:
 	font-size: 20px;
 }
 
-.textA {
+.textA, .textB {
 	position: absolute;
 	height: 58px;
 	width: 100%;
@@ -317,6 +347,10 @@ div.over { background-color: #ccc; }
 		-moz-transform: rotate(0deg);
 		-o-transform: rotate(0deg);  
 		transform: rotate(0deg);
+	}
+
+	#chatOne ul {
+		top: 0;
 	}
 
 }

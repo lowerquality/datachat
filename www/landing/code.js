@@ -43,12 +43,23 @@ Object.keys(db_key).forEach(function(key) {
 	var $chatOne = document.getElementById("chatOne");
 	$chatOne.classList.add("visible");
 
+	var $textA = $chatOne.querySelector("textarea");
+
 	// Add "zoomed" class to the column
 	views[key].$el.parentElement.classList.add("zoomed");
 
+	// Get the right prefix for the <li> and <p>
+	var $preFix = views[key].$el.getAttribute("class");
+	var $fiXed = $chatOne.querySelector(".numb");
+
 	// Show messages
-	var $list = $chatOne.querySelector(".first");
+	var $list = $chatOne.querySelector("ul");
 	$list.innerHTML = "";
+	
+	// Add the right prefix to the <li> and <p>
+	$list.classList.add($preFix);
+	$fiXed.classList.add($preFix);
+	
 	bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
 	// Close screen
@@ -56,8 +67,14 @@ Object.keys(db_key).forEach(function(key) {
 	    bigview.destroy();
 	    bigview = null;
 	    
+		// Empty textarea when closing window
+	    $textA.value = "";
 	    $chatOne.classList.remove("visible");
 	    views[key].$el.parentElement.classList.remove("zoomed");
+	    
+	    // Remove prefixes
+	    $list.classList.remove($preFix);
+	    $fiXed.classList.remove($preFix);
 	}
     }
 
