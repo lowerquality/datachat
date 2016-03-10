@@ -13,7 +13,7 @@ body {
 /* big chat window */
 
 #chatOne {
-/*	display: none; */
+	display: none;
 	position: absolute;
 	width: 75vw;
 	height: 75vh;
