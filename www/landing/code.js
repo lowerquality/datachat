@@ -53,6 +53,9 @@ Object.keys(db_key).forEach(function(key) {
 
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
+	    bigview.destroy();
+	    bigview = null;
+	    
 	    $chatOne.classList.remove("visible");
 	    views[key].$el.parentElement.classList.remove("zoomed");
 	}
