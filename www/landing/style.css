@@ -13,10 +13,10 @@ body {
 /* big chat window */
 
 #chatOne {
-	display: none;
+	display: none; 
 	position: absolute;
-	width: 90vw;
-	height: 90vh;
+	width: 75vw;
+	height: 75vh;
 	margin: auto;
 	top: 0;
 	bottom: 0;
@@ -29,16 +29,13 @@ body {
 
 .left, .right {
 	position: absolute;
-	width: 45vw;
+	width: 37.5vw;
 	top: 0;
 	bottom: 0;
 }
 
 .right {
 	right: 0;
-	font-family: monospace;
-	font-size: 14px;
-	color: #333;
 }
 
 .left {
@@ -48,7 +45,7 @@ body {
 
 .leftChat, .rightCode {
 	position: absolute;
-	width: 45vw;
+	width: 37.5vw;
 	top: 0;
 	bottom: 0;
 }
@@ -62,7 +59,28 @@ body {
 
 .leftChat {
 	left: 0;
-	border-right: 1px dashed #000;
+}
+
+.codeLine, .codeSend {
+	position: absolute;
+	top: 10px;
+	margin: 0;
+	color: #f0f;
+}
+
+.codeLine {
+	left: 10px;
+}
+
+.codeSend {
+	right: 10px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+.mono::-webkit-input-placeholder, textarea.mono {
+	font-family: monospace;
+	color: #f0f;
 }
 
 /* chat columns */
@@ -70,7 +88,16 @@ body {
 #one, #two, #thre, #four {
 	position: relative;
 	display: inline-block;
-	width: 25vw;
+	width: 24vw;
+	height: 100vh;
+	margin: 0;
+	overflow: hidden;
+}
+
+#info {
+	position: relative;
+	display: inline-block;
+	width: 4vw;
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
@@ -81,6 +108,7 @@ ul img {
     height: 100px;
     display: block;
     margin-bottom: 10px;
+    max-width: 100%;
 }
 /* 
 
@@ -107,6 +135,16 @@ li {
     width: 100%;
     margin-bottom: 58px;
     overflow: scroll;
+}
+
+#info > ul {
+	border-left: 1px dashed #000;
+	height: 100%;
+	background: #ff0;
+}
+
+#info li {
+	margin: 0;
 }
 
 #chatOne ul, #chatTwo ul, #chatThre ul, #chatFour ul {
@@ -149,29 +187,41 @@ some fixed elements:
 
 .open, .close, .numb, .send {
 	position: absolute;
-	top: 0;
 	font-family: sans-serif;
 }
 
 .open, .close {
+	top: 0;
 	right: 0;
 	margin: 10px 15px;
 	cursor: pointer;
 	font-size: 20px;
 }
 
-.open { -webkit-transform: rotate(45deg); }
+.open { 
+	-webkit-transform: rotate(45deg); 
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);  
+	transform: rotate(45deg);
+	z-index: 100;
+}
 
-.close { -webkit-transform: rotate(-135deg); z-index: 1000; }
+.close { 
+	-webkit-transform: rotate(-135deg); 
+	-moz-transform: rotate(-135deg);
+	-o-transform: rotate(-135deg);  
+	transform: rotate(-135deg); 
+	z-index: 1000;
+}
 
 .numb {
-        top: 10px;
+    top: 10px;
 	left: 10px;
 	margin: 0;
 }
 
 .send {
-        margin: 0;
+    margin: 0;
 	top: 10px;
 	right: 10px;
 	cursor: pointer;
@@ -185,32 +235,69 @@ some fixed elements:
 	bottom: 0;
 	margin: 0;
 	padding: 10px 0 0 0;
-	background: #fff;
-	border-top: 1px dashed #000;
 }
 
+.blueA {
+	background: transparent;
+/*	background: #eff; */
+}
+
+.noA { background: transparent; }
+
 textarea { 
-	font-size: 16px;
+	font-size: 14px;
 	height: 100%;
 	width: 100%;
 	margin: 0; 
-	padding: 0;
-	padding-left: 30px; 
+	padding: 0 30px;
 	border: none; 
 	background: transparent;
 	resize: none;
 	outline: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
+    -o-box-shadow: none;
     box-shadow: none;
     overflow: hidden;
 }
-div.over {
-    background-color: #ccc;
-}
 
-::-webkit-input-placeholder {
-   color: #000;
+::-webkit-input-placeholder { color: #000; }
+::-moz-input-placeholder { color: #000; }
+::-o-input-placeholder { color: #000; }
+::input-placeholder { color: #000; }
+
+div.over { background-color: #ccc; }
+
+/* mobile */
+
+@media only screen and (max-width: 800px) {
+
+	#one, #two, #thre, #four {
+		display: block;
+		width: 100vw;
+		height: 23vh;
+		border-bottom: 1px dashed #000;
+	}
+
+	#info {
+		display: block;
+		width: 100vw;
+		height: 8vh;
+	}
+
+	ul {
+		height: 100%;
+	}
+
+	li {
+		font-size: 16px;
+		line-height: 32px;
+	}
+
+	.textA {
+		display: none;
+	}
+
 }
 
 /* end */

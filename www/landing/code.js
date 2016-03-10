@@ -13,6 +13,9 @@ Object.keys(db_key).forEach(function(key) {
     dbs[key] = new S.Database(db_key[key] + "/db/");
     dbs[key].connect();
 
+    dbs[key].socket.onerror = function() {console.log("wserror", key); }
+    dbs[key].socket.onclose = function() {console.log("wsclose", key); }
+
     msgs[key] = new S.Subcollection(dbs[key], function(x) { return x.type=="message"; });
 
     var $column = document.getElementById(key);
