@@ -27,6 +27,10 @@ body {
 	background: #fff;
 }
 
+#chatOne.visible {
+    display: block; 
+}
+
 .left, .right {
 	position: absolute;
 	width: 37.5vw;
@@ -188,6 +192,7 @@ some fixed elements:
 .open, .close, .numb, .send {
 	position: absolute;
 	font-family: sans-serif;
+	z-index: 1000;
 }
 
 .open, .close {

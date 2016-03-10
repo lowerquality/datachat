@@ -35,6 +35,18 @@ Object.keys(db_key).forEach(function(key) {
     
     bind_message_drag(dbs[key], $textarea);
 
+    var $opener = $column.querySelector(".open");
+    $opener.onclick = function() {
+	// Show split screen
+	var $chatOne = document.getElementById("chatOne");
+	$chatOne.classList.add("visible");
+
+	// Close screen
+	$chatOne.querySelector(".close").onclick = function() {
+	    $chatOne.classList.remove("visible");
+	}
+    }
+
     dbs[key].onload = function() {
 	views[key].sort();
     }
