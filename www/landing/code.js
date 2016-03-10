@@ -16,7 +16,9 @@ Object.keys(db_key).forEach(function(key) {
     dbs[key].connect();
 
     dbs[key].socket.onerror = function() {console.log("wserror", key); }
-    dbs[key].socket.onclose = function() {console.log("wsclose", key); }
+    dbs[key].socket.onclose = function() {
+	ws_closed(key);
+    }
 
     msgs[key] = new S.Subcollection(dbs[key], function(x) { return x.type=="message"; });
 
@@ -201,4 +203,15 @@ function bind_message_drag(db, $textarea) {
 	    });
 	}.bind({doc: doc, file: file}))
     }, false);
+}
+
+function ws_closed(key) {
+    // uh-oh!
+    var $column = document.getElementById(key);
+    var $textarea = $column.querySelector("textarea");
+
+    $textarea.value = "";
+    $textarea.setAttribute("readonly", true);
+    $textarea.setAttribute("placeholder", "disconnected...");
+    $textarea.onclick = window.location.reload.bind(window.location);
 }
