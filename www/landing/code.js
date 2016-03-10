@@ -85,9 +85,14 @@ function message_render(obj, $div) {
 	    $a.setAttribute("target", "_blank");
 	    $a.href = obj.get_attachment_url(name);
 
-	    if(ext == "jpg" || ext == "png" || ext == "gif") {
+	    if(ext == "jpg" || ext == "png" || ext == "jpeg" || ext == "gif") {
 		var $img = document.createElement("img");
-		$img.src = obj.get_attachment_url(name);
+		if(ext == "gif") {
+		    $img.src = obj.get_attachment_url(name);
+		}
+		else {
+		    $img.src = obj.get_attachment_url(name + ".x100.jpg");
+		}
 		$a.appendChild($img);
 	    }
 	    else {
