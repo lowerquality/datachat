@@ -26,8 +26,9 @@ body {
 	border: 1px dashed black;
 	background: #eee;
 }
+
 #chatOne.visible {
-        display: block;
+    display: block;
 }
 
 .left, .right {
@@ -289,12 +290,6 @@ div.over { background-color: #ccc; }
 		border-bottom: 1px dashed #000;
 	}
 
-	#info {
-		display: block;
-		width: 100vw;
-		height: 8vh;
-	}
-
 	ul {
 		height: 100%;
 	}
@@ -306,6 +301,22 @@ div.over { background-color: #ccc; }
 
 	.textA {
 		display: none;
+	}
+
+	#info {
+		display: block;
+		width: 100vw;
+		height: 8vh;
+	}
+
+	#info ul { border-left: 0px; }
+
+	#info li {
+		font-size: 14px;
+		-webkit-transform: rotate(0deg); 
+		-moz-transform: rotate(0deg);
+		-o-transform: rotate(0deg);  
+		transform: rotate(0deg);
 	}
 
 }
