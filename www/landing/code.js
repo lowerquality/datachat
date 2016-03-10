@@ -9,7 +9,42 @@ var dbs = {};
 var msgs ={};
 var views={};
 
-var bigview;
+var bigview, codelog;
+
+var CodeLog = function(key, $root) {
+    S.Triggerable.call(this);
+    
+    this.key = key;
+    this.db = dbs[key];
+
+    this.$el = $root;
+    // Clear
+    this.$el.innerHTML = "";
+
+    this.log("" + this.db.items().length + " documents loaded into database `" + db_key[key] + "`");
+
+    this.connect(this.db, "create", this._oncreate.bind(this));
+    this.connect(this.db, "change", this._onchange.bind(this));
+    this.connect(this.db, "delete", this._ondelete.bind(this));
+}
+CodeLog.prototype = new S.Triggerable;
+CodeLog.prototype.log = function(msg, classname) {
+    var $li = document.createElement("li");
+    if(classname) {
+	$li.className = classname;
+    }
+    $li.textContent = msg;
+    this.$el.appendChild($li);
+}
+CodeLog.prototype._oncreate = function(obj) {
+    this.log("create: " + obj._id);
+}
+CodeLog.prototype._onchange = function(obj) {
+    this.log("change: " + obj._id);    
+}
+CodeLog.prototype._ondelete = function(obj) {
+    this.log("delete: " + obj._id);    
+}
 
 Object.keys(db_key).forEach(function(key) {
     dbs[key] = new S.Database(db_key[key] + "/db/");
@@ -64,10 +99,16 @@ Object.keys(db_key).forEach(function(key) {
 	
 	bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
+	// Create a log
+	codelog = new CodeLog(key, document.getElementById("codeOne"));
+
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
 	    bigview.destroy();
 	    bigview = null;
+
+	    codelog.destroy();
+	    codelog = null;
 	    
 		// Empty textarea when closing window
 	    $textA.value = "";

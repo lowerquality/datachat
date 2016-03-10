@@ -239,6 +239,10 @@ some fixed elements:
 	font-size: 20px;
 }
 
+.open:hover, .close:hover {
+    color: cyan;
+}
+
 .open { 
 	-webkit-transform: rotate(45deg); 
 	-moz-transform: rotate(45deg);
