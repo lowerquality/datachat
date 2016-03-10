@@ -9,6 +9,8 @@ var dbs = {};
 var msgs ={};
 var views={};
 
+var bigview;
+
 Object.keys(db_key).forEach(function(key) {
     dbs[key] = new S.Database(db_key[key] + "/db/");
     dbs[key].connect();
@@ -43,6 +45,11 @@ Object.keys(db_key).forEach(function(key) {
 
 	// Add "zoomed" class to the column
 	views[key].$el.parentElement.classList.add("zoomed");
+
+	// Show messages
+	var $list = $chatOne.querySelector(".first");
+	$list.innerHTML = "";
+	bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
