@@ -41,9 +41,13 @@ Object.keys(db_key).forEach(function(key) {
 	var $chatOne = document.getElementById("chatOne");
 	$chatOne.classList.add("visible");
 
+	// Add "zoomed" class to the column
+	views[key].$el.parentElement.classList.add("zoomed");
+
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
 	    $chatOne.classList.remove("visible");
+	    views[key].$el.parentElement.classList.remove("zoomed");
 	}
     }
 
