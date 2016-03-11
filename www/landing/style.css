@@ -130,8 +130,11 @@ body {
     cursor: pointer; 
     visibility: hidden;
 }
+.intro .actions span:hover {
+    text-decoration: underline;
+}
 
-.intro:hover .delete {
+.intro:hover .actions span {
     visibility: visible;
 }
 
@@ -174,6 +177,10 @@ textarea.code:focus {
 
 textarea.message:focus {
 	background: #ff0;
+}
+
+textarea.changed {
+    background-color: #ccf;
 }
 
 /* chat columns positioning */

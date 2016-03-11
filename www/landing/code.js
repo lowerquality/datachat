@@ -19,9 +19,26 @@ var CodeLog = function(key, $root) {
 
     this.ctx = {};
 
+    this.last_obj = null;
+    this.$last_el = null;
+
     this.$el = $root;
+
     // Clear
     this.$el.innerHTML = "";
+
+    // Find & reset leftChat
+    this.$leftChat = document.querySelector("#chatOne .leftChat");
+    this.$leftChat.innerHTML = "";
+    this.$leftChat.setAttribute("style", "");
+    this.$leftChat.className = "leftChat";
+    console.log("reset", this.$leftChat);
+
+    var $ul = document.createElement("ul");
+    $ul.id = "leftChat";
+    this.$leftChat.appendChild($ul);
+    
+    //console.log("reset", this.$leftChat);
 
     // Make sure we have at least one code object
     var msg_render = this.db.get("message-render");
@@ -30,9 +47,17 @@ var CodeLog = function(key, $root) {
 	    "_id": "message-render",
 	    "type": "message",
 	    "code": [
-		"CHAT.message_render = function(obj, $div) {",
-		"    $div.textContent = JSON.stringify(obj.get_doc());",
-		"}"
+		"var $ul = $div.querySelector('ul')",
+		"$ul.innerHTML = ''",
+		"db.items('time')",
+		"    .filter(function(obj) {",
+		"        return obj.type=='message' && obj.text;",
+		"    })",
+		"    .forEach(function(obj) {",
+		"        var $li = document.createElement('li');",
+		"        $li.textContent = JSON.stringify(obj.get_doc());",
+		"        $ul.appendChild($li);",
+		"     })",
 	    ].join("\n")
 	});
 	msg_render.save();
@@ -56,7 +81,7 @@ CodeLog.prototype._run_code_fn = function(obj) {
 
 		return eval(code);
 
-	    })(this.ctx, this.db, document.querySelector("#chatOne .leftChat"))
+	    })(this.ctx, this.db, this.$leftChat)
 
 	    if(ret) {
 		this.log("" + ret);
@@ -68,15 +93,64 @@ CodeLog.prototype._run_code_fn = function(obj) {
     }.bind(this)
     return runfn;
 }
+CodeLog.prototype._delete_fn = function(db, obj) {
+    var delfn = function() {
+	
+	if(db.get(obj._id)) {
+	    var really = confirm("Delete document " + obj._id);
+	    if(really) {
+		obj.deleteme();
+	    }
+	}
+	else {
+	    this.log("Document is already deleted.");
+	}
+    }.bind(this);
+    
+    return delfn;
+}
+CodeLog.prototype.get_actions = function(obj, $div) {
+    var acts = {};
+
+    if(obj.code) {
+	acts["run"] = this._run_code_fn(obj);
+    }
+    acts["save"] = function() {
+	obj.save();
+
+	// Un-set the "changed" style
+	var $ta = $div.querySelector("textarea");
+	if($ta.className.indexOf("changed") >= 0) {
+	    $ta.classList.remove("changed");
+	}
+    }
+    if(obj.type != "peer" && obj.type != "design") {    
+	acts["delete"] = this._delete_fn(this.db, obj);
+    }
+    
+    return acts;
+}
 CodeLog.prototype.init_code = function() {
     this.db.items("time")
 	.filter(function(obj) { return obj.type=='message' && obj.code; })
 	.forEach(function(obj) {
-	    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+	    var $li = this.put_preamble(obj, true);
 	    this.show_message(obj, $li);
 	}, this)
 }
 CodeLog.prototype.show_message = function(obj, $div) {
+    if(this.last_obj && this.last_obj._id == obj._id) {
+	// Duplicate!
+	
+	this.last_obj = null;
+	// Remove last object
+	this.$last_el.parentElement.removeChild(this.$last_el);
+	return this.show_message(obj, $div);
+    }
+    
+    this.last_obj = obj;
+    this.$last_el = $div;
+    
     if(obj.text) {
 	var $message = document.createElement("textarea");
 	$message.className = "message";
@@ -95,7 +169,9 @@ CodeLog.prototype.show_message = function(obj, $div) {
 CodeLog.prototype._watch_changes = function(obj, name, $div) {
     $div.onchange = function() {
 	console.log("change");
+	$div.classList.add("changed");
 	obj[name] = $div.value;
+	obj.time = new Date().getTime();
     }
 }
 CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
@@ -121,7 +197,7 @@ CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
     
     return $span;
 }
-CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
+CodeLog.prototype.put_preamble = function(obj, showactions) {
     var $li = document.createElement("li");
 
     var $intro = document.createElement("div");
@@ -139,36 +215,21 @@ CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
 	this.render_kv("_peer", obj._peer, "peer", $intro);
     }
 
-    var $actions = document.createElement("span");
-    $actions.className = "actions";
-    $intro.appendChild($actions);
-
-    // Allow deleting documents
-    if(showdelete && obj.type != "peer" && obj.type != "design") {
-	var $del = document.createElement("span");
-	$del.className = "delete";
-	$del.textContent = "delete";
-	$del.onclick = function() {
-	    if(this.db.get(obj._id)) {
-		var really = confirm("Delete document " + obj._id);
-		if(really) {
-		    obj.deleteme();
-		}
-	    }
-	    else {
-		console.log("Doc is already deleted.");
-	    }
-	}.bind(this)
-	$actions.appendChild($del);
+    if(showactions) {
+	var actions = this.get_actions(obj, $li);
+	
+	var $actions = document.createElement("span");
+	$actions.className = "actions";
+	$intro.appendChild($actions);
+	
+	Object.keys(actions || {}).forEach(function(action_name) {
+	    var $act = document.createElement("span");
+	    $act.className = action_name;
+	    $act.textContent = action_name;
+	    $act.onclick = this.actions[action_name];
+	    $actions.appendChild($act);
+	}.bind({actions: actions}));
     }
-
-    Object.keys(actions || {}).forEach(function(action_name) {
-	var $act = document.createElement("span");
-	$act.className = action_name;
-	$act.textContent = action_name;
-	$act.onclick = this.actions[action_name];
-	$actions.appendChild($act);
-    }.bind({actions: actions}));
 
     this.$el.appendChild($li);
     return $li;
@@ -183,7 +244,9 @@ CodeLog.prototype.log = function(msg, classname) {
 }
 CodeLog.prototype._oncreate = function(obj) {
     var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
-    var $childI = $li.querySelector(".intro")
+
+    var $li = this.put_preamble(obj, true);
+        var $childI = $li.querySelector(".intro")
     var $circle = document.createElement("div");
     $circle.id = "circle";
 
@@ -194,7 +257,7 @@ CodeLog.prototype._oncreate = function(obj) {
 
 }
 CodeLog.prototype._onchange = function(obj) {
-    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+    var $li = this.put_preamble(obj, true);
     this.show_message(obj, $li);    
     $li.classList.add("change");
 }
@@ -247,18 +310,17 @@ Object.keys(db_key).forEach(function(key) {
 	var $preFix = views[key].$el.getAttribute("class");
 	var $fiXed = $chatOne.querySelector(".numb");
 
+	// Create a log
+	codelog = new CodeLog(key, document.getElementById("codeOne"));
+
 	// Show messages
-	var $list = document.getElementById("leftOne");
-	$list.innerHTML = "";
+	var $list = $chatOne.querySelector(".leftChat ul");
 	
 	// Add the right prefix to the <li> and <p>
 	$list.classList.add($preFix);
 	$fiXed.classList.add($preFix);
 	
-	bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
-
-	// Create a log
-	codelog = new CodeLog(key, document.getElementById("codeOne"));
+	//bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
 	// Hook up the "input script" button
 	var $codeSend = $chatOne.querySelector(".right .textB .codeSend");
@@ -276,14 +338,11 @@ Object.keys(db_key).forEach(function(key) {
 		$codeText.value = "";
 	    }
 	};
-	// Right screen
-	/*var $renderF = $chatOne.querySelector(".renderF");
-	$renderF.innerHTML = message_render;*/
 
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
-	    bigview.destroy();
-	    bigview = null;
+	    //bigview.destroy();
+	    //bigview = null;
 
 	    codelog.destroy();
 	    codelog = null;
