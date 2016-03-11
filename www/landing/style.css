@@ -371,13 +371,16 @@ div.over { background-color: #ccc; }
     word-wrap: break-word;
     line-height: 1em;
 }
-.intro .delete {
+.intro .actions span {
     font-size: 7pt;
-    color: red;
     cursor: pointer;
     visibility: hidden;
+    margin-right: 4px;
 }
-.intro:hover .delete {
+.intro .delete {
+    color: red;
+}
+.intro:hover .actions span {
     visibility: visible;
 }
 .keyvalue {

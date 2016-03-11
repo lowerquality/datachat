@@ -44,11 +44,23 @@ var CodeLog = function(key, $root) {
     this.connect(this.db, "delete", this._ondelete.bind(this));
 }
 CodeLog.prototype = new S.Triggerable;
+CodeLog.prototype._run_code_fn = function(obj) {
+    var runfn = function() {
+	var code = obj.code;
+	if(code) {
+	    eval.call(window, code);
+	}
+	else {
+	    console.log("no code found!");
+	}
+    }.bind(this)
+    return runfn;
+}
 CodeLog.prototype.init_code = function() {
     this.db.items("time")
 	.filter(function(obj) { return obj.type=='message' && obj.code; })
 	.forEach(function(obj) {
-	    var $li = this.put_preamble(obj, true);
+	    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
 	    this.show_message(obj, $li);
 	}, this)
 }
@@ -134,9 +146,9 @@ CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
 	var $act = document.createElement("span");
 	$act.className = action_name;
 	$act.textContent = action_name;
-	$act.onclick = actions[action_name];
+	$act.onclick = this.actions[action_name];
 	$actions.appendChild($act);
-    });
+    }.bind({actions: actions}));
 
     this.$el.appendChild($li);
     return $li;
@@ -173,7 +185,7 @@ Object.keys(db_key).forEach(function(key) {
 	ws_closed(key);
     }
 
-    msgs[key] = new S.Subcollection(dbs[key], function(x) { return x.type=="message"; });
+    msgs[key] = new S.Subcollection(dbs[key], function(x) { return x.type=="message" && (x._attachments || x.text); });
 
     var $column = document.getElementById(key);
     var $list = $column.querySelector("ul");
