@@ -45,7 +45,7 @@ var CodeLog = function(key, $root) {
     if(!msg_render) {
 	msg_render = new S.Document(this.db, {
 	    "_id": "message-render",
-	    "type": "message",
+	    "type": "script",
 	    "code": [
 		"var $ul = $div.querySelector('ul')",
 		"$ul.innerHTML = ''",
@@ -62,6 +62,7 @@ var CodeLog = function(key, $root) {
 	});
 	msg_render.save();
     }
+    msg_render.type = "script";
     this.init_code();
 
     this.log("" + this.db.items().length + " documents loaded into database “" + db_key[key] + "”");
@@ -132,7 +133,7 @@ CodeLog.prototype.get_actions = function(obj, $div) {
 }
 CodeLog.prototype.init_code = function() {
     this.db.items("time")
-	.filter(function(obj) { return obj.type=='message' && obj.code; })
+	.filter(function(obj) { return obj.type=='script' && obj.code; })
 	.forEach(function(obj) {
 	    var $li = this.put_preamble(obj, true);
 	    this.show_message(obj, $li);
@@ -328,7 +329,7 @@ Object.keys(db_key).forEach(function(key) {
 
 	    if(code) {
 		var code_doc = new S.Document(dbs[key], {
-		    "type": "message",
+		    "type": "script",
 		    "code": code,
 		    "time": new Date().getTime()
 		});
