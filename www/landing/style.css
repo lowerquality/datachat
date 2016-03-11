@@ -358,10 +358,27 @@ div.over { background-color: #ccc; }
 	}
 
 }
-
+#codeOne li.create {
+    border-left: 1px solid rgb(0,255,0);
+}
+#codeOne li.change {
+    border-left: 1px solid rgb(0,0,255);
+}
+#codeOne li.delete {
+    border-left: 1px solid rgb(255,0,0);
+}
 .intro {
     word-wrap: break-word;
     line-height: 1em;
+}
+.intro .delete {
+    font-size: 7pt;
+    color: red;
+    cursor: pointer;
+    visibility: hidden;
+}
+.intro:hover .delete {
+    visibility: visible;
 }
 .keyvalue {
     margin-right: 4px;

@@ -78,7 +78,7 @@ CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
     
     return $span;
 }
-CodeLog.prototype.put_preamble = function(obj) {
+CodeLog.prototype.put_preamble = function(obj, showdelete) {
     var $li = document.createElement("li");
 
     var $intro = document.createElement("div");
@@ -96,6 +96,25 @@ CodeLog.prototype.put_preamble = function(obj) {
 	this.render_kv("_peer", obj._peer, "peer", $intro);
     }
 
+    // Allow deleting documents
+    if(showdelete && obj.type != "peer" && obj.type != "design") {
+	var $del = document.createElement("span");
+	$del.className = "delete";
+	$del.textContent = "delete";
+	$del.onclick = function() {
+	    if(this.db.get(obj._id)) {
+		var really = confirm("Delete document " + obj._id);
+		if(really) {
+		    obj.deleteme();
+		}
+	    }
+	    else {
+		console.log("Doc is already deleted.");
+	    }
+	}.bind(this)
+	$intro.appendChild($del);
+    }
+
     this.$el.appendChild($li);
     return $li;
 }
@@ -108,13 +127,16 @@ CodeLog.prototype.log = function(msg, classname) {
     this.$el.appendChild($li);
 }
 CodeLog.prototype._oncreate = function(obj) {
-    this.put_preamble(obj);
+    var $li = this.put_preamble(obj, true);
+    $li.classList.add("create");
 }
 CodeLog.prototype._onchange = function(obj) {
-    this.put_preamble(obj);
+    var $li = this.put_preamble(obj, true);
+    $li.classList.add("change");
 }
 CodeLog.prototype._ondelete = function(obj) {
-    this.put_preamble(obj);
+    var $li = this.put_preamble(obj);
+    $li.classList.add("delete");
 }
 
 Object.keys(db_key).forEach(function(key) {
