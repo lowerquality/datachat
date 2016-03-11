@@ -197,7 +197,7 @@ textarea.message:focus {
 }
 
 textarea.changed {
-    background-color: #ccf;
+    background-color: #fd7;
 }
 
 /* chat columns positioning */
