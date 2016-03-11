@@ -245,24 +245,29 @@ CodeLog.prototype.log = function(msg, classname) {
 }
 CodeLog.prototype._oncreate = function(obj) {
     var $li = this.put_preamble(obj, true);
-        var $childI = $li.querySelector(".intro")
+    var $childI = $li.querySelector(".intro")
     var $circle = document.createElement("div");
     $circle.id = "circle";
 
     this.show_message(obj, $li);
     $childI.insertBefore($circle, $childI.childNodes[0]);
-    console.log($circle);
-    /*$li.classList.add("create");*/
 
 }
 CodeLog.prototype._onchange = function(obj) {
     var $li = this.put_preamble(obj, true);
-    this.show_message(obj, $li);    
-    $li.classList.add("change");
+    var $childI = $li.querySelector(".intro")
+    var $circle = document.createElement("div");
+    $circle.id = "circCh";
+
+    this.show_message(obj, $li);
+    $childI.insertBefore($circle, $childI.childNodes[0]);
 }
 CodeLog.prototype._ondelete = function(obj) {
     var $li = this.put_preamble(obj);
-    $li.classList.add("delete");
+    var $childI = $li.querySelector(".intro")
+    var $circle = document.createElement("div");
+    $circle.id = "circDel";
+    $childI.insertBefore($circle, $childI.childNodes[0]);
 }
 
 Object.keys(db_key).forEach(function(key) {
