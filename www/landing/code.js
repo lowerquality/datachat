@@ -68,11 +68,48 @@ CodeLog.prototype._run_code_fn = function(obj) {
     }.bind(this)
     return runfn;
 }
+CodeLog.prototype._delete_fn = function(db, obj) {
+    var delfn = function() {
+	
+	if(db.get(obj._id)) {
+	    var really = confirm("Delete document " + obj._id);
+	    if(really) {
+		obj.deleteme();
+	    }
+	}
+	else {
+	    this.log("Document is already deleted.");
+	}
+    }.bind(this);
+    
+    return delfn;
+}
+CodeLog.prototype.get_actions = function(obj, $div) {
+    var acts = {};
+
+    if(obj.code) {
+	acts["run"] = this._run_code_fn(obj);
+    }
+    acts["save"] = function() {
+	obj.save();
+
+	// Un-set the "changed" style
+	var $ta = $div.querySelector("textarea");
+	if($ta.className.indexOf("changed") >= 0) {
+	    $ta.classList.remove("changed");
+	}
+    }
+    if(obj.type != "peer" && obj.type != "design") {    
+	acts["delete"] = this._delete_fn(this.db, obj);
+    }
+    
+    return acts;
+}
 CodeLog.prototype.init_code = function() {
     this.db.items("time")
 	.filter(function(obj) { return obj.type=='message' && obj.code; })
 	.forEach(function(obj) {
-	    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+	    var $li = this.put_preamble(obj, true);
 	    this.show_message(obj, $li);
 	}, this)
 }
@@ -95,6 +132,7 @@ CodeLog.prototype.show_message = function(obj, $div) {
 CodeLog.prototype._watch_changes = function(obj, name, $div) {
     $div.onchange = function() {
 	console.log("change");
+	$div.classList.add("changed");
 	obj[name] = $div.value;
     }
 }
@@ -121,7 +159,7 @@ CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
     
     return $span;
 }
-CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
+CodeLog.prototype.put_preamble = function(obj, showactions) {
     var $li = document.createElement("li");
 
     var $intro = document.createElement("div");
@@ -139,36 +177,21 @@ CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
 	this.render_kv("_peer", obj._peer, "peer", $intro);
     }
 
-    var $actions = document.createElement("span");
-    $actions.className = "actions";
-    $intro.appendChild($actions);
-
-    // Allow deleting documents
-    if(showdelete && obj.type != "peer" && obj.type != "design") {
-	var $del = document.createElement("span");
-	$del.className = "delete";
-	$del.textContent = "delete";
-	$del.onclick = function() {
-	    if(this.db.get(obj._id)) {
-		var really = confirm("Delete document " + obj._id);
-		if(really) {
-		    obj.deleteme();
-		}
-	    }
-	    else {
-		console.log("Doc is already deleted.");
-	    }
-	}.bind(this)
-	$actions.appendChild($del);
+    if(showactions) {
+	var actions = this.get_actions(obj, $li);
+	
+	var $actions = document.createElement("span");
+	$actions.className = "actions";
+	$intro.appendChild($actions);
+	
+	Object.keys(actions || {}).forEach(function(action_name) {
+	    var $act = document.createElement("span");
+	    $act.className = action_name;
+	    $act.textContent = action_name;
+	    $act.onclick = this.actions[action_name];
+	    $actions.appendChild($act);
+	}.bind({actions: actions}));
     }
-
-    Object.keys(actions || {}).forEach(function(action_name) {
-	var $act = document.createElement("span");
-	$act.className = action_name;
-	$act.textContent = action_name;
-	$act.onclick = this.actions[action_name];
-	$actions.appendChild($act);
-    }.bind({actions: actions}));
 
     this.$el.appendChild($li);
     return $li;
@@ -182,12 +205,12 @@ CodeLog.prototype.log = function(msg, classname) {
     this.$el.appendChild($li);
 }
 CodeLog.prototype._oncreate = function(obj) {
-    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+    var $li = this.put_preamble(obj, true);
     this.show_message(obj, $li);
     $li.classList.add("create");
 }
 CodeLog.prototype._onchange = function(obj) {
-    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+    var $li = this.put_preamble(obj, true);
     this.show_message(obj, $li);    
     $li.classList.add("change");
 }

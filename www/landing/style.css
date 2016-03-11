@@ -403,5 +403,8 @@ textarea.code, textarea.message {
 textarea.code {
     font-family: monospace;
 }
+textarea.changed {
+    background-color: #ccf;
+}
 
 /* end */
