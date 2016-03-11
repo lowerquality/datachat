@@ -39,7 +39,7 @@ var CodeLog = function(key, $root) {
     }
     this.init_code();
 
-    this.log("" + this.db.items().length + " documents loaded into database `" + db_key[key] + "`");
+    this.log("" + this.db.items().length + " documents loaded into database “" + db_key[key] + "”");
 
     this.connect(this.db, "create", this._oncreate.bind(this));
     this.connect(this.db, "change", this._onchange.bind(this));
