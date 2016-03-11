@@ -340,18 +340,18 @@ some fixed elements:
 }
 
 .open, .close {
-	top: 0;
 	right: 0;
-	margin: 10px 15px;
 	cursor: pointer;
 	font-size: 20px;
 }
 
-.open:hover, .close:hover {
-    color: #0ff;
+.open:hover {
+    color: #00f;
 }
 
 .open { 
+	top: 0;
+	margin: 10px 15px;
 	-webkit-transform: rotate(45deg); 
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);  
@@ -360,10 +360,12 @@ some fixed elements:
 }
 
 .close { 
-	-webkit-transform: rotate(-135deg); 
-	-moz-transform: rotate(-135deg);
-	-o-transform: rotate(-135deg);  
-	transform: rotate(-135deg); 
+	top: -25px;
+	width: 26px;
+	margin: 0 -1px 0 0;
+	background: #eee;
+	border: 1px dashed #000;
+	text-align: center;
 	z-index: 1000;
 }
 
