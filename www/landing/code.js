@@ -243,8 +243,6 @@ CodeLog.prototype.log = function(msg, classname) {
     this.$el.appendChild($li);
 }
 CodeLog.prototype._oncreate = function(obj) {
-    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
-
     var $li = this.put_preamble(obj, true);
         var $childI = $li.querySelector(".intro")
     var $circle = document.createElement("div");
