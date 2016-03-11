@@ -28,10 +28,17 @@ var CodeLog = function(key, $root) {
     this.$el.innerHTML = "";
 
     // Find & reset leftChat
-    this.$leftChat = document.querySelector("#chatOne .leftChat")
-    this.$leftChat.className = "leftChat";
+    this.$leftChat = document.querySelector("#chatOne .leftChat");
+    this.$leftChat.innerHTML = "";
     this.$leftChat.setAttribute("style", "");
+    this.$leftChat.className = "leftChat";
     console.log("reset", this.$leftChat);
+
+    var $ul = document.createElement("ul");
+    $ul.id = "leftChat";
+    this.$leftChat.appendChild($ul);
+    
+    //console.log("reset", this.$leftChat);
 
     // Make sure we have at least one code object
     var msg_render = this.db.get("message-render");
@@ -294,18 +301,17 @@ Object.keys(db_key).forEach(function(key) {
 	var $preFix = views[key].$el.getAttribute("class");
 	var $fiXed = $chatOne.querySelector(".numb");
 
+	// Create a log
+	codelog = new CodeLog(key, document.getElementById("codeOne"));
+
 	// Show messages
-	var $list = document.getElementById("leftOne");
-	$list.innerHTML = "";
+	var $list = $chatOne.querySelector(".leftChat ul");
 	
 	// Add the right prefix to the <li> and <p>
 	$list.classList.add($preFix);
 	$fiXed.classList.add($preFix);
 	
 	//bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
-
-	// Create a log
-	codelog = new CodeLog(key, document.getElementById("codeOne"));
 
 	// Hook up the "input script" button
 	var $codeSend = $chatOne.querySelector(".right .textB .codeSend");
