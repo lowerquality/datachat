@@ -322,7 +322,7 @@ Object.keys(db_key).forEach(function(key) {
 	
 	// Add the right prefix to the <li> and <p>
 	$list.classList.add($preFix);
-	$fiXed.classList.add($preFix);
+	// $fiXed.classList.add($preFix);
 	
 	//bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
@@ -353,12 +353,13 @@ Object.keys(db_key).forEach(function(key) {
 	    
 	    // Empty textarea when closing window
 	    $textA.value = "";
+	    var $chatOne = document.getElementById("chatOne");
 	    $chatOne.classList.remove("visible");
 	    views[key].$el.parentElement.classList.remove("zoomed");
 	    
 	    // Remove prefixes
 	    $list.classList.remove($preFix);
-	    $fiXed.classList.remove($preFix);
+	    //$fiXed.classList.remove($preFix);
 	}
     }
 
