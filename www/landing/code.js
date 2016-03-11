@@ -89,7 +89,7 @@ CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
     
     return $span;
 }
-CodeLog.prototype.put_preamble = function(obj, showdelete) {
+CodeLog.prototype.put_preamble = function(obj, showdelete, actions) {
     var $li = document.createElement("li");
 
     var $intro = document.createElement("div");
@@ -107,6 +107,10 @@ CodeLog.prototype.put_preamble = function(obj, showdelete) {
 	this.render_kv("_peer", obj._peer, "peer", $intro);
     }
 
+    var $actions = document.createElement("span");
+    $actions.className = "actions";
+    $intro.appendChild($actions);
+
     // Allow deleting documents
     if(showdelete && obj.type != "peer" && obj.type != "design") {
 	var $del = document.createElement("span");
@@ -123,8 +127,16 @@ CodeLog.prototype.put_preamble = function(obj, showdelete) {
 		console.log("Doc is already deleted.");
 	    }
 	}.bind(this)
-	$intro.appendChild($del);
+	$actions.appendChild($del);
     }
+
+    Object.keys(actions || {}).forEach(function(action_name) {
+	var $act = document.createElement("span");
+	$act.className = action_name;
+	$act.textContent = action_name;
+	$act.onclick = actions[action_name];
+	$actions.appendChild($act);
+    });
 
     this.$el.appendChild($li);
     return $li;
@@ -208,7 +220,23 @@ Object.keys(db_key).forEach(function(key) {
 
 	// Create a log
 	codelog = new CodeLog(key, document.getElementById("codeOne"));
-	
+
+	// Hook up the "input script" button
+	var $codeSend = $chatOne.querySelector(".right .textB .codeSend");
+	$codeSend.onclick = function() {
+	    var $codeText = $chatOne.querySelector(".right .textB textarea.mono");
+	    var code = $codeText.value;
+
+	    if(code) {
+		var code_doc = new S.Document(dbs[key], {
+		    "type": "message",
+		    "code": code,
+		    "time": new Date().getTime()
+		});
+		code_doc.save();
+		$codeText.value = "";
+	    }
+	};
 	// Right screen
 	/*var $renderF = $chatOne.querySelector(".renderF");
 	$renderF.innerHTML = message_render;*/
