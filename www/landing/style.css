@@ -66,6 +66,14 @@ body {
 	left: 0;
 }
 
+#circle {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background: #3d3;
+}
+
 /* styling of children */
 
 .codeLine, .codeSend {
@@ -87,7 +95,7 @@ body {
 
 .mono::-webkit-input-placeholder, textarea.mono {
 	font-family: monospace;
-	color: #00d;
+	color: #00f;
 }
 
 #codeOne li.create {
@@ -103,15 +111,23 @@ body {
 }
 
 .intro {
-	margin: 10px 0;
+	/*margin: 10px 0;*/
     word-wrap: break-word;
-    line-height: 1em;
+}
+
+.intro .actions span {
+    cursor: pointer;
+    visibility: hidden;
+    margin-right: 4px;
+}
+
+.intro:hover .actions span {
+    visibility: visible;
 }
 
 .intro .delete {
-    font-size: 12px;
-    color: red;
-    cursor: pointer;
+    color: #f00;
+    cursor: pointer; 
     visibility: hidden;
 }
 
@@ -122,27 +138,42 @@ body {
 .keyvalue {
     margin-right: 5px;
     font-family: monospace;
-    font-size: 12px;
 }
 
 .keyvalue .key {
     margin-right: 5px;
-    color: #444;
+    color: #000;
+}
+
+.keyvalue .value {
+	background: #fff;
+	padding: 0 5px;
 }
 
 textarea.code, textarea.message {
-    font-size: 12px;
-    background-color: white;
-    border: 1px solid #333;
     resize: vertical;
     padding: 5px;
+    width: calc(100% - 35px);
+    background: transparent;
+    border: 1px solid #999;
 }
 
 textarea.code {
+	color: #999;
     font-family: monospace;
-    /*margin: 0 10px 0 0;*/
-    width: calc(100% - 10px);
-    height: 100px;
+}
+textarea.code:hover {
+	color: #000;
+	border: 1px solid #000;
+}
+textarea.code:focus {
+	color: #000;
+	background: #fff;
+	border: 1px solid #000;
+}
+
+textarea.message:focus {
+	background: #ff0;
 }
 
 /* chat columns positioning */

@@ -183,8 +183,15 @@ CodeLog.prototype.log = function(msg, classname) {
 }
 CodeLog.prototype._oncreate = function(obj) {
     var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
+    var $childI = $li.querySelector(".intro")
+    var $circle = document.createElement("div");
+    $circle.id = "circle";
+
     this.show_message(obj, $li);
-    $li.classList.add("create");
+    $childI.insertBefore($circle, $childI.childNodes[0]);
+    console.log($circle);
+    /*$li.classList.add("create");*/
+
 }
 CodeLog.prototype._onchange = function(obj) {
     var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
