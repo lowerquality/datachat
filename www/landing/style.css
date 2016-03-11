@@ -1,4 +1,6 @@
 
+/* general styles */
+
 * {
 	box-sizing: border-box; 
 }
@@ -31,6 +33,25 @@ body {
     display: block;
 }
 
+/* left & right, top & bottom positioning */
+
+.leftChat, .rightCode {
+	position: absolute;
+	width: 37.5vw;
+	top: 0;
+	bottom: 0;
+}
+
+.rightCode {
+	right: 0;
+	font-family: monospace;
+	color: #00d;
+}
+
+.leftChat {
+	left: 0;
+}
+
 .left, .right {
 	position: absolute;
 	width: 37.5vw;
@@ -43,26 +64,9 @@ body {
 
 .left {
 	left: 0;
-	border-right: 1px dashed #000;
 }
 
-.leftChat, .rightCode {
-	position: absolute;
-	width: 37.5vw;
-	top: 0;
-	bottom: 0;
-}
-
-.rightCode {
-	right: 0;
-	font-family: monospace;
-	font-size: 14px;
-	color: #00d;
-}
-
-.leftChat {
-	left: 0;
-}
+/* styling of children */
 
 .codeLine, .codeSend {
 	position: absolute;
@@ -86,7 +90,62 @@ body {
 	color: #00d;
 }
 
-/* chat columns */
+#codeOne li.create {
+    border-left: 1px solid rgb(0,255,0);
+}
+
+#codeOne li.change {
+    border-left: 1px solid rgb(0,0,255);
+}
+
+#codeOne li.delete {
+    border-left: 1px solid rgb(255,0,0);
+}
+
+.intro {
+	margin: 10px 0;
+    word-wrap: break-word;
+    line-height: 1em;
+}
+
+.intro .delete {
+    font-size: 12px;
+    color: red;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.intro:hover .delete {
+    visibility: visible;
+}
+
+.keyvalue {
+    margin-right: 5px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.keyvalue .key {
+    margin-right: 5px;
+    color: #444;
+}
+
+textarea.code, textarea.message {
+    font-size: 12px;
+    background-color: white;
+    border: 1px solid #333;
+    resize: vertical;
+    padding: 5px;
+}
+
+textarea.code {
+    font-family: monospace;
+    /*margin: 0 10px 0 0;*/
+    width: calc(100% - 10px);
+    height: 100px;
+}
+
+/* chat columns positioning */
 
 #one, #two, #thre, #four {
 	position: relative;
@@ -106,11 +165,7 @@ body {
 	overflow: hidden;
 }
 
-/* 
-
-list styles
- 
-*/
+/* list styles */
 
 ul { 
 	position: absolute;
@@ -128,11 +183,10 @@ li {
 }
 
 ul img {
-    /*width: 66%;*/
+	display: block;
+	max-width: 100%;
     height: 100px;
-    display: block;
     margin-bottom: 10px;
-    max-width: 100%;
 }
 
 #one > ul, #two > ul, #thre > ul, #four > ul {
@@ -188,7 +242,7 @@ ul > li::before {
 	content: ">";
 }
 
-/*  */
+/* prefix */
 
 p.numb::before {
 	position: absolute;
@@ -240,7 +294,7 @@ some fixed elements:
 }
 
 .open:hover, .close:hover {
-    color: cyan;
+    color: #0ff;
 }
 
 .open { 
@@ -357,51 +411,6 @@ div.over { background-color: #ccc; }
 		top: 0;
 	}
 
-}
-#codeOne li.create {
-    border-left: 1px solid rgb(0,255,0);
-}
-#codeOne li.change {
-    border-left: 1px solid rgb(0,0,255);
-}
-#codeOne li.delete {
-    border-left: 1px solid rgb(255,0,0);
-}
-.intro {
-    word-wrap: break-word;
-    line-height: 1em;
-}
-.intro .actions span {
-    font-size: 7pt;
-    cursor: pointer;
-    visibility: hidden;
-    margin-right: 4px;
-}
-.intro .delete {
-    color: red;
-}
-.intro:hover .actions span {
-    visibility: visible;
-}
-.keyvalue {
-    margin-right: 4px;
-    font-family: sans-serif, sans;
-    font-size: 7pt;
-    color: black;
-}
-.keyvalue .key {
-    margin-right: 2px;
-    color: #444;
-}
-textarea.code, textarea.message {
-    font-size: 8pt;
-    background-color: white;
-    border: 1px solid #333;
-    resize: vertical;
-    padding: 5px;
-}
-textarea.code {
-    font-family: monospace;
 }
 
 /* end */
