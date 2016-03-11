@@ -390,13 +390,15 @@ div.over { background-color: #ccc; }
     margin-right: 2px;
     color: #444;
 }
-textarea.code {
-    font-family: monospace;
+textarea.code, textarea.message {
     font-size: 8pt;
     background-color: white;
     border: 1px solid #333;
     resize: vertical;
     padding: 5px;
+}
+textarea.code {
+    font-family: monospace;
 }
 
 /* end */

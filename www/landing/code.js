@@ -48,12 +48,23 @@ CodeLog.prototype.init_code = function() {
     this.db.items("time")
 	.filter(function(obj) { return obj.type=='message' && obj.code; })
 	.forEach(function(obj) {
-	    var $li = this.put_preamble(obj);
-	    var $code = document.createElement("textarea");
-	    $code.className = "code";
-	    $code.value = obj.code;
-	    $li.appendChild($code);
+	    var $li = this.put_preamble(obj, true);
+	    this.show_message(obj, $li);
 	}, this)
+}
+CodeLog.prototype.show_message = function(obj, $div) {
+    if(obj.text) {
+	var $message = document.createElement("textarea");
+	$message.className = "message";
+	$message.value = obj.text;
+	$div.appendChild($message);
+    }
+    if(obj.code) {
+	var $code = document.createElement("textarea");
+	$code.className = "code";
+	$code.value = obj.code;
+	$div.appendChild($code);
+    }
 }
 CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
     var $span = document.createElement("span");
@@ -128,10 +139,12 @@ CodeLog.prototype.log = function(msg, classname) {
 }
 CodeLog.prototype._oncreate = function(obj) {
     var $li = this.put_preamble(obj, true);
+    this.show_message(obj, $li);
     $li.classList.add("create");
 }
 CodeLog.prototype._onchange = function(obj) {
     var $li = this.put_preamble(obj, true);
+    this.show_message(obj, $li);    
     $li.classList.add("change");
 }
 CodeLog.prototype._ondelete = function(obj) {
