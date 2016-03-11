@@ -23,8 +23,15 @@ var CodeLog = function(key, $root) {
     this.$last_el = null;
 
     this.$el = $root;
+
     // Clear
     this.$el.innerHTML = "";
+
+    // Find & reset leftChat
+    this.$leftChat = document.querySelector("#chatOne .leftChat")
+    this.$leftChat.className = "leftChat";
+    this.$leftChat.setAttribute("style", "");
+    console.log("reset", this.$leftChat);
 
     // Make sure we have at least one code object
     var msg_render = this.db.get("message-render");
@@ -59,7 +66,7 @@ CodeLog.prototype._run_code_fn = function(obj) {
 
 		return eval(code);
 
-	    })(this.ctx, this.db, document.querySelector("#chatOne .leftChat"))
+	    })(this.ctx, this.db, this.$leftChat)
 
 	    if(ret) {
 		this.log("" + ret);
