@@ -108,14 +108,20 @@ body {
     line-height: 1em;
 }
 
-.intro .delete {
+.intro .actions span {
     font-size: 12px;
-    color: red;
     cursor: pointer;
     visibility: hidden;
+    margin-right: 4px;
+}
+.intro .actions span:hover {
+    text-decoration: underline;
+}
+.intro .actions .delete {
+    color: red;
 }
 
-.intro:hover .delete {
+.intro:hover .actions span {
     visibility: visible;
 }
 
