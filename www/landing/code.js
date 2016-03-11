@@ -19,6 +19,9 @@ var CodeLog = function(key, $root) {
 
     this.ctx = {};
 
+    this.last_obj = null;
+    this.$last_el = null;
+
     this.$el = $root;
     // Clear
     this.$el.innerHTML = "";
@@ -114,6 +117,18 @@ CodeLog.prototype.init_code = function() {
 	}, this)
 }
 CodeLog.prototype.show_message = function(obj, $div) {
+    if(this.last_obj && this.last_obj._id == obj._id) {
+	// Duplicate!
+	
+	this.last_obj = null;
+	// Remove last object
+	this.$last_el.parentElement.removeChild(this.$last_el);
+	return this.show_message(obj, $div);
+    }
+    
+    this.last_obj = obj;
+    this.$last_el = $div;
+    
     if(obj.text) {
 	var $message = document.createElement("textarea");
 	$message.className = "message";
@@ -134,6 +149,7 @@ CodeLog.prototype._watch_changes = function(obj, name, $div) {
 	console.log("change");
 	$div.classList.add("changed");
 	obj[name] = $div.value;
+	obj.time = new Date().getTime();
     }
 }
 CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
