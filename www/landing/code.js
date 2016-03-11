@@ -17,6 +17,8 @@ var CodeLog = function(key, $root) {
     this.key = key;
     this.db = dbs[key];
 
+    this.ctx = {};
+
     this.$el = $root;
     // Clear
     this.$el.innerHTML = "";
@@ -48,7 +50,17 @@ CodeLog.prototype._run_code_fn = function(obj) {
     var runfn = function() {
 	var code = obj.code;
 	if(code) {
-	    eval.call(window, code);
+
+	    // Create an evaluation context with access to the database and the DOM
+	    var ret = (function(ctx, db, $div) {
+
+		return eval(code);
+
+	    })(this.ctx, this.db, document.querySelector("#chatOne .leftChat"))
+
+	    if(ret) {
+		this.log("" + ret);
+	    }
 	}
 	else {
 	    console.log("no code found!");
@@ -70,12 +82,20 @@ CodeLog.prototype.show_message = function(obj, $div) {
 	$message.className = "message";
 	$message.value = obj.text;
 	$div.appendChild($message);
+	this._watch_changes(obj, "text", $message);    
     }
     if(obj.code) {
 	var $code = document.createElement("textarea");
 	$code.className = "code";
 	$code.value = obj.code;
 	$div.appendChild($code);
+	this._watch_changes(obj, "code", $code);
+    }
+}
+CodeLog.prototype._watch_changes = function(obj, name, $div) {
+    $div.onchange = function() {
+	console.log("change");
+	obj[name] = $div.value;
     }
 }
 CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
@@ -162,12 +182,12 @@ CodeLog.prototype.log = function(msg, classname) {
     this.$el.appendChild($li);
 }
 CodeLog.prototype._oncreate = function(obj) {
-    var $li = this.put_preamble(obj, true);
+    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
     this.show_message(obj, $li);
     $li.classList.add("create");
 }
 CodeLog.prototype._onchange = function(obj) {
-    var $li = this.put_preamble(obj, true);
+    var $li = this.put_preamble(obj, true, {"run": this._run_code_fn(obj)});
     this.show_message(obj, $li);    
     $li.classList.add("change");
 }
