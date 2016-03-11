@@ -21,6 +21,22 @@ var CodeLog = function(key, $root) {
     // Clear
     this.$el.innerHTML = "";
 
+    // Make sure we have at least one code object
+    var msg_render = this.db.get("message-render");
+    if(!msg_render) {
+	msg_render = new S.Document(this.db, {
+	    "_id": "message-render",
+	    "type": "message",
+	    "code": [
+		"CHAT.message_render = function(obj, $div) {",
+		"    $div.textContent = JSON.stringify(obj.get_doc());",
+		"}"
+	    ].join("\n")
+	});
+	msg_render.save();
+    }
+    this.init_code();
+
     this.log("" + this.db.items().length + " documents loaded into database `" + db_key[key] + "`");
 
     this.connect(this.db, "create", this._oncreate.bind(this));
@@ -28,6 +44,61 @@ var CodeLog = function(key, $root) {
     this.connect(this.db, "delete", this._ondelete.bind(this));
 }
 CodeLog.prototype = new S.Triggerable;
+CodeLog.prototype.init_code = function() {
+    this.db.items("time")
+	.filter(function(obj) { return obj.type=='message' && obj.code; })
+	.forEach(function(obj) {
+	    var $li = this.put_preamble(obj);
+	    var $code = document.createElement("textarea");
+	    $code.className = "code";
+	    $code.value = obj.code;
+	    $li.appendChild($code);
+	}, this)
+}
+CodeLog.prototype.render_kv = function(k,v,classname, $parent) {
+    var $span = document.createElement("span");
+    $span.className = "keyvalue";
+    if(classname) {
+	$span.classList.add(classname)
+    }
+
+    var $k = document.createElement("span");
+    $k.className = "key";
+    $k.textContent = k;
+    $span.appendChild($k);
+
+    var $v = document.createElement("span");
+    $v.className = "value";
+    $v.textContent = v;
+    $span.appendChild($v);
+
+    if($parent) {
+	$parent.appendChild($span);
+    }
+    
+    return $span;
+}
+CodeLog.prototype.put_preamble = function(obj) {
+    var $li = document.createElement("li");
+
+    var $intro = document.createElement("div");
+    $intro.className = "intro";
+    $li.appendChild($intro);
+
+    if(obj.type) {
+	this.render_kv("type", obj.type, "type", $intro);
+    }
+    this.render_kv("_id", obj._id, "id", $intro);
+    if(obj.time || obj._rev) {
+	this.render_kv("time", "" + new Date(obj.time || 1000*Number(obj._rev.split("-")[1])), "time", $intro);
+    }
+    if(obj._peer) {
+	this.render_kv("_peer", obj._peer, "peer", $intro);
+    }
+
+    this.$el.appendChild($li);
+    return $li;
+}
 CodeLog.prototype.log = function(msg, classname) {
     var $li = document.createElement("li");
     if(classname) {
@@ -37,13 +108,13 @@ CodeLog.prototype.log = function(msg, classname) {
     this.$el.appendChild($li);
 }
 CodeLog.prototype._oncreate = function(obj) {
-    this.log("create: " + obj._id);
+    this.put_preamble(obj);
 }
 CodeLog.prototype._onchange = function(obj) {
-    this.log("change: " + obj._id);    
+    this.put_preamble(obj);
 }
 CodeLog.prototype._ondelete = function(obj) {
-    this.log("delete: " + obj._id);    
+    this.put_preamble(obj);
 }
 
 Object.keys(db_key).forEach(function(key) {
@@ -115,7 +186,7 @@ Object.keys(db_key).forEach(function(key) {
 	    codelog.destroy();
 	    codelog = null;
 	    
-		// Empty textarea when closing window
+	    // Empty textarea when closing window
 	    $textA.value = "";
 	    $chatOne.classList.remove("visible");
 	    views[key].$el.parentElement.classList.remove("zoomed");
