@@ -40,9 +40,17 @@ var CodeLog = function(key, $root) {
 	    "_id": "message-render",
 	    "type": "message",
 	    "code": [
-		"CHAT.message_render = function(obj, $div) {",
-		"    $div.textContent = JSON.stringify(obj.get_doc());",
-		"}"
+		"var $ul = $div.querySelector('ul')",
+		"$ul.innerHTML = ''",
+		"db.items('time')",
+		"    .filter(function(obj) {",
+		"        return obj.type=='message' && obj.text;",
+		"    })",
+		"    .forEach(function(obj) {",
+		"        var $li = document.createElement('li');",
+		"        $li.textContent = JSON.stringify(obj.get_doc());",
+		"        $ul.appendChild($li);",
+		"     })",
 	    ].join("\n")
 	});
 	msg_render.save();
@@ -294,7 +302,7 @@ Object.keys(db_key).forEach(function(key) {
 	$list.classList.add($preFix);
 	$fiXed.classList.add($preFix);
 	
-	bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
+	//bigview = new S.CollectionView(msgs[key], message_render, "li", message_sort, $list);
 
 	// Create a log
 	codelog = new CodeLog(key, document.getElementById("codeOne"));
@@ -315,14 +323,11 @@ Object.keys(db_key).forEach(function(key) {
 		$codeText.value = "";
 	    }
 	};
-	// Right screen
-	/*var $renderF = $chatOne.querySelector(".renderF");
-	$renderF.innerHTML = message_render;*/
 
 	// Close screen
 	$chatOne.querySelector(".close").onclick = function() {
-	    bigview.destroy();
-	    bigview = null;
+	    //bigview.destroy();
+	    //bigview = null;
 
 	    codelog.destroy();
 	    codelog = null;
