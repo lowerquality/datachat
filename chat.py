@@ -12,6 +12,7 @@ import os
 import sys
 
 import serve
+from __version__ import __version__
 
 def get_open_port(desired=0):
     import socket
@@ -63,7 +64,7 @@ def run_chat():
             QtWidgets.QFileDialog.ShowDirsOnly)
     start_thread()
 
-    txt.setText("Chat is running")
+    txt.setText("Chat (%s) is running" % (__version__))
 
     btn.setText("Open in browser")
     btn.clicked.disconnect()
@@ -75,7 +76,7 @@ def quit_server():
 layout = QtWidgets.QVBoxLayout()
 w.setLayout(layout)
 
-txt = QtWidgets.QLabel('Chat is not running')
+txt = QtWidgets.QLabel('Chat (v.%s) is not running' % (__version__))
 layout.addWidget(txt)
 
 btn = QtWidgets.QPushButton('Run chat')
