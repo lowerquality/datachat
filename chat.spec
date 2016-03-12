@@ -6,9 +6,9 @@ import os
 data_files = []
 for dirpath in ['www']:
     data_files.append((dirpath, dirpath))
+# ?
+data_files.append(('seatbelt/static', 'seatbelt/seatbelt/static'))
 
-data_files.append(('/Users/rmo/src/seatbelt/static', 'seatbelt/static'))
-    
 a = Analysis(['chat.py'],
              pathex=[os.path.abspath(os.curdir)],
              binaries=None,

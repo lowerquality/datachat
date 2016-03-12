@@ -1,0 +1,3 @@
+[submodule "seatbelt"]
+	path = seatbelt
+	url = https://github.com/lowerquality/seatbelt.git
